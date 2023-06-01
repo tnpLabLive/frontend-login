@@ -21,8 +21,9 @@ function Login() {
 
       if (data.message !== "Password incorrect") {
         setToken(data);
-
-        console.log("data:", data);
+        
+        localStorage.setItem("authToken", JSON.stringify(data))
+        
         navigate("/dashboard");
       } else {
         alert("user not found");
