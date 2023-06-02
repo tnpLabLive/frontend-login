@@ -20,6 +20,7 @@ function Login() {
       });
 
       if (data.message !== "Password incorrect") {
+        
         setToken(data);
         
         localStorage.setItem("authToken", JSON.stringify(data))
@@ -28,6 +29,7 @@ function Login() {
       } else {
         alert("user not found");
       }
+      
     } catch (error) {
       alert(error.message);
     }

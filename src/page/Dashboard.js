@@ -4,31 +4,20 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Dashboard() {
-  const { token, setToken } = useContext(userContext);
   const [dataPost, setDataPost] = useState([]);
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
 
   useEffect(() => {
-    const getAuthToken = JSON.parse(localStorage.getItem("authToken"));
-    setToken(getAuthToken);
-
-    if (!getAuthToken.token) {
-      navigate("/");
-    }
-
     getPost();
-  }, [navigate, setToken]);
+  }, []);
 
   const url = "http://localhost:5005/api/post";
 
   const getPost = async () => {
     try {
-      const getAuthToken = JSON.parse(localStorage.getItem("authToken"));
-      const { data } = await axios.get(url, {
-        headers: { Authorization: `Bearer ${getAuthToken.token}` },
-      });
+      const { data } = await axios.get(url);
 
       if (data) {
         console.log("post:", data);
@@ -42,42 +31,52 @@ function Dashboard() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.clear("getAuthToken");
+  const handleLogout = async () => {
+    const url = "http://localhost:5005/api/logout/";
+
+    const data = await axios.post(url);
+    console.log('data:', data)
+
     navigate("/");
   };
 
-
-  const formHandle = async(e) =>{
+  const formHandle = async (e) => {
     e.preventDefault();
 
     const url = "http://localhost:5005/api/sendpost";
-    try {
-      const {data} = await axios.post(url,title )
-      console.log('data:', data)
-    } catch (error) {
-      
-    }
-  }
+    // try {
 
+    //   const {data} = await axios.post(url,{
+    //     headers: { Authorization: `Bearer ${getAuthToken.token}` },
+    //   },
+    // )
+
+    //   console.log('data:', data)
+    // } catch (error) {
+
+    // }
+  };
 
   return (
     <div>
       <h1>Dashboard</h1>
-      <h1>Token: {token.email}</h1>
+      {/* <h1>Token: {token.email}</h1> */}
       <button onClick={handleLogout}>Logout</button>
 
       <div>
-        {dataPost?.map((value, index)=>{
-          return(
-            <p key={index}>{value.title}</p>
-          )
+        {dataPost?.map((value, index) => {
+          return <p key={index}>{value.title}</p>;
         })}
       </div>
 
       <form onSubmit={formHandle}>
-        <input type="text" placeholder="enter post" value={title} onChange={(e)=> setTitle(e.target.value)}/>
-        <button type="submit" >Sent Post</button>
+        <input
+          type="text"
+          placeholder="enter post"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <button type="submit">Sent Post</button>
       </form>
     </div>
   );
