@@ -1,8 +1,10 @@
-import React from 'react'
+import { useContext } from "react"
+import { userContext } from "../context/createContext"
 
 function Admin() {
+  const {state} = useContext(userContext)
   return (
-    <div>Admin</div>
+    <div>Admin {state}</div>
   )
 }
 

@@ -1,15 +1,15 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
+import { userContext } from "./createContext";
 
-export const userContext = createContext();
-
-const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState("");
+function AuthProvider({ children }) {
+  const [state, setState] = useState("tnplab.in");
+  const [data, setData] = useState("");
 
   return (
-    <userContext.Provider value={{ token, setToken }}>
+    <userContext.Provider value={{ state, setState, data, setData }}>
       {children}
     </userContext.Provider>
   );
-};
+}
 
 export default AuthProvider;
